@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="question_4Flow" doc:id="cba4f577-9376-44db-817b-81298acb2a8d">
+		<http:listener doc:name="Listener" doc:id="b5f43156-a29a-4498-93d0-f842ab8aa8f2" config-ref="HTTP_Listener_config" path="choice" />
+		<choice doc:name="Choice" doc:id="df7ef665-a720-427b-a7fe-887a2cc5cfbd">
+			<when expression="#[attributes.queryParams.num &lt; 10]">
+				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="9acc2641-62bf-4521-bb54-4d866d5890fa" />
+			</when>
+			<when expression="#[attributes.queryParams.num == 1]">
+				<set-payload value="num is 1" doc:name="Set Payload" doc:id="786b05fc-5d43-4b0e-9cec-3becef8a2810" />
+			</when>
+			<when expression="attributes.queryParams.num &lt; 10">
+				<set-payload value="num less than 10" doc:name="Set Payload" doc:id="7f225d80-e3cc-4ea4-90e9-33991d8cb1ab" />
+			</when>
+			<when expression="attributes.queryParams.num ==10">
+				<set-payload value="num is equal to 10" doc:name="Set Payload" doc:id="5978dc7f-a955-4cb1-8e27-2eac713be24b" />
+			</when>
+			<when expression="attributes.queryParams.num &gt;10">
+				<set-payload value="num is greater than 10" doc:name="Set Payload" doc:id="40ab4fe1-c870-4b3b-aa20-043e355ba0f7" />
+			</when>
+			<otherwise>
+				<set-payload value="num less than 10" doc:name="Set Payload" doc:id="1d3bfa6b-0bc9-4d40-a798-15b05546c4f1" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

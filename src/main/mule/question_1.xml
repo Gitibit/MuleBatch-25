@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="question_1Flow" doc:id="fddd102e-ab9f-4887-8890-58c8363927be" >
+		<http:listener doc:name="Listener" doc:id="04a5d12c-72f6-482b-b874-1b6a670ebb52" config-ref="HTTP_Listener_config" path="select"/>
+		<db:select doc:name="Select" doc:id="d6185583-7a2f-460a-8853-84a751f7f456" config-ref="Database_Config_craft_db">
+			<db:sql ><![CDATA[SELECT * FROM mulesoftdb.tb_product;]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="eefce0b8-f7d6-493c-a267-343a814070ad" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload filter($.price >5000)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="ee79f89f-8b4f-4f05-9afc-63a7cbb272e8" message="#[payload]"/>
+	</flow>
+</mule>

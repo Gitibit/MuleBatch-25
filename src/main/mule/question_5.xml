@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="question_5Flow" doc:id="692ed660-acf0-47d1-b1a7-3d3103fa99d8" >
+		<http:listener doc:name="Listener" doc:id="4c6ac7c9-55c3-450a-89c4-43b1e37ae1d8" config-ref="HTTP_Listener_config" path="update"/>
+		<db:bulk-update doc:name="Bulk update" doc:id="5e20f6d7-ee2a-4a46-9392-7a2135f0e565" config-ref="Database_Config_localhost">
+			<db:bulk-input-parameters ><![CDATA[#[payload map {
+name: $.name, product_id: $.product_id,
+description: $.description,
+video_url: $.video_url,
+price: $.price 
+	}]]]></db:bulk-input-parameters>
+			<db:sql ><![CDATA[update products set  name = :name, description = :description, 
+video_url = :video_url, price = :price 
+where product_id = :product_id]]></db:sql>
+		</db:bulk-update>
+		<ee:transform doc:name="Transform Message" doc:id="3747e827-0c27-4e5b-92a3-b1f78dbafd59" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+ payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value="item updated" doc:name="Set Payload" doc:id="07abfb40-23c9-485e-821c-667baa7e4baa" />
+	</flow>
+</mule>

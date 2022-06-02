@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:request-config name="HTTP_Request_configuration1" doc:name="HTTP Request configuration" doc:id="6f503ba7-e02a-41ba-8836-ebff8ed70526" basePath="/api" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="question-2Flow" doc:id="9ec74085-1fec-4915-a894-b7afdbc60b2e" >
+		<http:listener doc:name="Listener" doc:id="f6cf691e-735d-4585-aa15-1b0cb5587458" config-ref="HTTP_Listener_config" path="select"/>
+		<http:request method="GET" doc:name="Request" doc:id="d7aa7cc1-4142-4645-8714-09fab7df2cf6" config-ref="HTTP_Request_configuration1" path="products">
+		</http:request>
+	</flow>
+</mule>

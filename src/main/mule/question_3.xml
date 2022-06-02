@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="0926c93c-f729-4be3-bf2b-26677ff43f92" />
+	<flow name="question_3Flow" doc:id="6b7a8411-36fc-433d-a28f-709a1c964763" >
+		<http:listener doc:name="Listener" doc:id="05f5ee5f-efa2-4862-a52e-04c641f330d4" config-ref="HTTP_Listener_config" path="order"/>
+		<db:select doc:name="Select" doc:id="212ac94c-651f-4ccd-ae9e-545867cc5929" config-ref="Database_Config_craft_db">
+			<db:sql ><![CDATA[SELECT * FROM mulesoftdb.orders;]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="a81f6fb1-61ca-45ff-899d-ed5406476067" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/csv
+---
+(payload orderBy $.amount >50000) ++ (payload orderBy $.amount <50000) orderBy $.status]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<file:write doc:name="Write" doc:id="8f92f39a-68f1-454f-b4b9-36338fc036d4" config-ref="File_Config" path="C:\Users\Mesee\Documents\yeah\mynewyeah\+5000.txt"/>
+	</flow>
+</mule>
